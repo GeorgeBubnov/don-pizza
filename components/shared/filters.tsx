@@ -6,14 +6,14 @@ import { Input } from '@/components/ui/input';
 import { CheckboxFiltersGroup } from './checkbox-filters-group';
 import { Title } from './title';
 import { RangeSlider } from './range-slider';
-import { useFilterIngredients } from '@/hooks/use-ingredients';
+import { useFilterIngredients } from '@/hooks/use-filter-ingredients';
 
 interface Props {
   className?: string;
 }
 
 export const Filters: React.FC<Props> = ({ className }) => {
-  const { ingredients } = useFilterIngredients();
+  const { ingredients, loading } = useFilterIngredients();
 
   const items = ingredients.map((item) => ({ value: String(item.id), text: item.name }));
 
@@ -41,6 +41,7 @@ export const Filters: React.FC<Props> = ({ className }) => {
         limit={6}
         defaultItems={items.slice(0, 6)}
         items={items}
+        loading={loading}
       />
     </div>
   );

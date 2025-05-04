@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { FilterChecboxProps, FilterCheckbox } from './filter-checkbox';
-import { Input } from '../ui/input';
-import { Skeleton } from '../ui';
+import React from "react";
+import { FilterChecboxProps, FilterCheckbox } from "./filter-checkbox";
+import { Input } from "../ui/input";
+import { Skeleton } from "../ui";
 
 type Item = FilterChecboxProps;
 
@@ -26,7 +26,7 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
   items,
   defaultItems,
   limit = 5,
-  searchInputPlaceholder = 'Поиск...',
+  searchInputPlaceholder = "Поиск...",
   className,
   loading,
   onClickCheckbox,
@@ -34,7 +34,7 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
   name,
 }) => {
   const [showAll, setShowAll] = React.useState(false);
-  const [searchValue, setSearchValue] = React.useState('');
+  const [searchValue, setSearchValue] = React.useState("");
 
   const onChangeSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -64,11 +64,7 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
 
       {showAll && (
         <div className="mb-5">
-          <Input
-            onChange={onChangeSearchInput}
-            placeholder={searchInputPlaceholder}
-            className="bg-gray-50 border-none"
-          />
+          <Input onChange={onChangeSearchInput} placeholder={searchInputPlaceholder} className="bg-gray-50 border-none" />
         </div>
       )}
 
@@ -87,9 +83,9 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
       </div>
 
       {items.length > limit && (
-        <div className={showAll ? 'border-t border-t-neutral-100 mt-4' : ''}>
+        <div className={showAll ? "border-t border-t-neutral-100 mt-4" : ""}>
           <button onClick={() => setShowAll(!showAll)} className="text-primary mt-3">
-            {showAll ? 'Скрыть' : '+ Показать все'}
+            {showAll ? "Скрыть" : "+ Показать все"}
           </button>
         </div>
       )}

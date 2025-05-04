@@ -9,7 +9,7 @@ import { RangeSlider } from "./range-slider";
 import { useFilterIngredients } from "@/hooks/use-filter-ingredients";
 import { useSet } from "react-use";
 import qs from "qs";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface Props {
   className?: string;
@@ -20,14 +20,32 @@ interface PriceProps {
   priceTo?: number;
 }
 
+interface QueryFilters extends PriceProps {
+  pizzaTypes: string;
+  sizes: string;
+  ingredients: string;
+}
+
 export const Filters: React.FC<Props> = ({ className }) => {
+  const searchParams = useSearchParams() as unknown as Map<keyof QueryFilters, string>;
   const router = useRouter();
-  const { ingredients, loading, onAddId, selectedIngredients } = useFilterIngredients();
+  const { ingredients, loading, onAddId, selectedIngredients } = useFilterIngredients(
+    searchParams.get("ingredients")?.split(",")
+  );
 
-  const [sizes, { toggle: toggleSizes }] = useSet(new Set<string>([]));
-  const [pizzaTypes, { toggle: togglePizzaTypes }] = useSet(new Set<string>([]));
+  const [sizes, { toggle: toggleSizes }] = useSet(
+    new Set<string>(searchParams.has("sizes") ? searchParams.get("sizes")?.split(",") : [])
+  );
+  const [pizzaTypes, { toggle: togglePizzaTypes }] = useSet(
+    new Set<string>(
+      searchParams.has("pizzaTypes") ? searchParams.get("pizzaTypes")?.split(",") : []
+    )
+  );
 
-  const [prices, setPrice] = React.useState<PriceProps>({});
+  const [prices, setPrice] = React.useState<PriceProps>({
+    priceFrom: Number(searchParams.get("priceFrom")) || undefined,
+    priceTo: Number(searchParams.get("priceTo")) || undefined,
+  });
 
   const items = ingredients.map((item) => ({ value: String(item.id), text: item.name }));
 
@@ -50,7 +68,9 @@ export const Filters: React.FC<Props> = ({ className }) => {
       arrayFormat: "comma",
     });
 
-    router.push(`?${query}`);
+    router.push(`?${query}`, {
+      scroll: false,
+    });
   }, [prices, pizzaTypes, sizes, selectedIngredients, router]);
 
   return (

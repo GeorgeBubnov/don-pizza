@@ -8,3 +8,4 @@ export { FilterCheckbox } from "./filter-checkbox";
 export { Filters } from "./filters";
 export { ProductsGroupList } from "./products-group-list";
 export { PizzaImage } from "./pizza-image";
+export { GroupVariants } from "./group-variants";

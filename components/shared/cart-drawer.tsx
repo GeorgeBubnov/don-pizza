@@ -18,10 +18,20 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { PizzaSize, PizzaType } from "@/constants/pizza";
 import { Title } from "./title";
 import { cn } from "@/lib/utils";
+import { CartDrawerItem } from "./cart-drawer-item";
 
 export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
   const totalAmount = 593;
-  const items = [{}, {}, {}];
+  const items = [
+    {
+      id: 18,
+      name: "Пепперони фреш",
+      imageUrl:
+        "https://media.dodostatic.net/image/r:233x233/11EE7D61304FAF5A98A6958F2BB2D260.webp",
+      price: 350,
+      quantity: 1,
+    },
+  ];
 
   return (
     <Sheet>
@@ -54,27 +64,41 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
             </div>
           )}
 
-          <div className="-mx-6 mt-5 overflow-auto flex-1">Товар</div>
-
-          <SheetFooter className="-mx-6 bg-white p-8">
-            <div className="w-full">
-              <div className="flex mb-4">
-                <span className="flex flex-1 text-lg text-neutral-500">
-                  Итого
-                  <div className="flex-1 border-b border-dashed border-b-neutral-200 relative -top-1 mx-2" />
-                </span>
-
-                <span className="font-bold text-lg">{totalAmount} ₽</span>
+          {totalAmount > 0 && (
+            <>
+              <div className="-mx-6 mt-5 overflow-auto flex-1">
+                {items.map((item) => (
+                  <div key={item.id} className="mb-2">
+                    <CartDrawerItem
+                      imageUrl={item.imageUrl}
+                      price={item.price}
+                      quantity={item.quantity}
+                    />
+                  </div>
+                ))}
               </div>
 
-              <Link href="/checkout">
-                <Button type="submit" className="w-full h-12 text-base">
-                  Оформить заказ
-                  <ArrowRight className="w-5 ml-2" />
-                </Button>
-              </Link>
-            </div>
-          </SheetFooter>
+              <SheetFooter className="-mx-6 bg-white p-8">
+                <div className="w-full">
+                  <div className="flex mb-4">
+                    <span className="flex flex-1 text-lg text-neutral-500">
+                      Итого
+                      <div className="flex-1 border-b border-dashed border-b-neutral-200 relative -top-1 mx-2" />
+                    </span>
+
+                    <span className="font-bold text-lg">{totalAmount} ₽</span>
+                  </div>
+
+                  <Link href="/checkout">
+                    <Button type="submit" className="w-full h-12 text-base">
+                      Оформить заказ
+                      <ArrowRight className="w-5 ml-2" />
+                    </Button>
+                  </Link>
+                </div>
+              </SheetFooter>
+            </>
+          )}
         </div>
       </SheetContent>
     </Sheet>

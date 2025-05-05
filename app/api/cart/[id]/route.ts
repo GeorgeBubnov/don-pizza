@@ -1,42 +1,41 @@
 import { prisma } from "@/prisma/prisma-client";
+import { updateCartTotalAmount } from "@/lib/update-cart-total-amount";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
+export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   try {
+    const id = Number(params.id);
+    const data = (await req.json()) as { quantity: number };
     const token = "11111";
 
     if (!token) {
-      return NextResponse.json({ totalAmount: 0, items: [] });
+      return NextResponse.json({ error: "Cart token not found" });
     }
 
-    const userCart = await prisma.cart.findFirst({
+    const cartItem = await prisma.cartItem.findFirst({
       where: {
-        OR: [
-          {
-            token,
-          },
-        ],
-      },
-      include: {
-        items: {
-          orderBy: {
-            createdAt: "desc",
-          },
-          include: {
-            productItem: {
-              include: {
-                product: true,
-              },
-            },
-            ingredients: true,
-          },
-        },
+        id,
       },
     });
 
-    return NextResponse.json(userCart);
+    if (!cartItem) {
+      return NextResponse.json({ error: "Cart item not found" });
+    }
+
+    await prisma.cartItem.update({
+      where: {
+        id,
+      },
+      data: {
+        quantity: data.quantity,
+      },
+    });
+
+    const updatedUserCart = await updateCartTotalAmount(token);
+
+    return NextResponse.json(updatedUserCart);
   } catch (error) {
-    console.log("[CART_GET] Server error", error);
-    return NextResponse.json({ message: "Не удалось получить корзину" }, { status: 500 });
+    console.log("[CART_PATCH] Server error", error);
+    return NextResponse.json({ message: "Не удалось обновить корзину" }, { status: 500 });
   }
 }

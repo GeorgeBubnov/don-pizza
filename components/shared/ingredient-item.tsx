@@ -23,7 +23,7 @@ export const IngredientItem: React.FC<Props> = ({
     <div
       className={cn(
         "flex items-center flex-col p-1 rounded-md w-32 text-center relative cursor-pointer shadow-md bg-white",
-        { "border border-primary": active },
+        { "border border-primary": active, "border bg-white": !active },
         className
       )}
       onClick={onClick}

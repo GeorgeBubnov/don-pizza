@@ -6,9 +6,9 @@ import { Ingredient, ProductItem } from "@prisma/client";
 import { PizzaImage, Title, GroupVariants, IngredientItem } from "../";
 import { Button } from "../ui";
 import { cn } from "@/lib/utils";
-import { mapPizzaType, PizzaSize, pizzaSizes, PizzaType, pizzaTypes } from "@/constants/pizza";
-import { useSet } from "react-use";
-import { access } from "fs";
+import { PizzaSize, PizzaType, pizzaTypes } from "@/constants/pizza";
+import { usePizzaOptions } from "@/hooks";
+import { getPizzaDetails } from "@/lib";
 
 interface Props {
   imageUrl: string;
@@ -27,17 +27,24 @@ export const ChoosePizzaForm: React.FC<Props> = ({
   onSubmit,
   className,
 }) => {
-  const [size, setSize] = React.useState<PizzaSize>(20);
-  const [type, setType] = React.useState<PizzaType>(1);
+  const {
+    size,
+    type,
+    selectedIngredients,
+    availableSizes,
+    currentItemId,
+    setSize,
+    setType,
+    addIngredient,
+  } = usePizzaOptions(items);
 
-  const [selectedIngredients, { toggle: addIngredient }] = useSet(new Set<number>([]));
-
-  const pizzaPrice = items.find((item) => item.pizzaType === type && item.size === size)!.price;
-  const totalIngredientsPrice = ingredients
-    .filter((ingredient) => selectedIngredients.has(ingredient.id))
-    .reduce((acc, ingredient) => acc + ingredient.price, 0);
-  const totalPrice = pizzaPrice + totalIngredientsPrice;
-  const textDetaills = `${size} см, ${mapPizzaType[type]} пицца`;
+  const { totalPrice, textDetaills } = getPizzaDetails(
+    type,
+    size,
+    items,
+    ingredients,
+    selectedIngredients
+  );
 
   return (
     <div className={cn(className, "flex flex-1")}>
@@ -50,15 +57,15 @@ export const ChoosePizzaForm: React.FC<Props> = ({
 
         <div className="flex flex-col gap-4 mt-5">
           <GroupVariants
-            items={pizzaSizes}
-            value={String(size)}
-            onClick={(value) => setSize(Number(value) as PizzaSize)}
-          />
-
-          <GroupVariants
             items={pizzaTypes}
             value={String(type)}
             onClick={(value) => setType(Number(value) as PizzaType)}
+          />
+
+          <GroupVariants
+            items={availableSizes}
+            value={String(size)}
+            onClick={(value) => setSize(Number(value) as PizzaSize)}
           />
         </div>
 

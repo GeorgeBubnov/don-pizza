@@ -1,0 +1,48 @@
+"use client";
+
+import React from "react";
+import { Ingredient } from "@prisma/client";
+
+import { PizzaImage } from "./pizza-image";
+import { Title } from "./title";
+import { Button } from "../ui";
+import { GroupVariants } from "./group-variants";
+import { cn } from "@/lib/utils";
+
+interface Props {
+  imageUrl: string;
+  name: string;
+  ingredients: Ingredient[];
+  onSubmit?: VoidFunction;
+  className?: string;
+}
+
+export const ChoosePizzaForm: React.FC<Props> = ({
+  name,
+  imageUrl,
+  ingredients,
+  onSubmit,
+  className,
+}) => {
+  const totalPrice = 350;
+
+  return (
+    <div className={cn(className, "flex flex-1")}>
+      <PizzaImage imageUrl={imageUrl} size={30} />
+
+      <div className="w-[490px] bg-[#f7f6f5] p-7">
+        <Title text={name} size="md" className="font-extrabold mb-1" />
+
+        <p className="text-gray-400">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, minus laudantium?
+          Magnam non repellat autem ad mollitia earum facere possimus aliquam, tenetur a, natus
+          reiciendis impedit similique enim. Magni, aut.
+        </p>
+
+        <Button className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">
+          Добавить в корзину за {totalPrice} ₽
+        </Button>
+      </div>
+    </div>
+  );
+};

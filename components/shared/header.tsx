@@ -1,13 +1,14 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
-import React from 'react';
-import { Container } from './container';
-import Image from 'next/image';
-import Link from 'next/link';
-import { SearchInput } from './search-input';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { ProfileButton } from './profile-button';
+import { cn } from "@/lib/utils";
+import React from "react";
+import { Container } from "./container";
+import Image from "next/image";
+import Link from "next/link";
+import { SearchInput } from "./search-input";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ProfileButton } from "./profile-button";
+import { CartButton } from "./cart-button";
 
 interface Props {
   hasSearch?: boolean;
@@ -22,20 +23,19 @@ export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, clas
   const searchParams = useSearchParams();
 
   React.useEffect(() => {
-    let toastMessage = '';
+    let toastMessage = "";
 
-    if (searchParams.has('paid')) {
-      toastMessage = 'Заказ успешно оплачен! Информация отправлена на почту.';
+    if (searchParams.has("paid")) {
+      toastMessage = "Заказ успешно оплачен! Информация отправлена на почту.";
     }
 
-    if (searchParams.has('verified')) {
-      toastMessage = 'Почта успешно подтверждена!';
+    if (searchParams.has("verified")) {
+      toastMessage = "Почта успешно подтверждена!";
     }
-
   }, []);
 
   return (
-    <header className={cn('border-b', className)}>
+    <header className={cn("border-b", className)}>
       <Container className="flex items-center justify-between py-8">
         {/* Левая часть */}
         <Link href="/">
@@ -56,9 +56,9 @@ export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, clas
 
         {/* Правая часть */}
         <div className="flex items-center gap-3">
-
           <ProfileButton onClickSignIn={() => setOpenAuthModal(true)} />
 
+          <CartButton />
         </div>
       </Container>
     </header>

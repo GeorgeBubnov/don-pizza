@@ -1,4 +1,4 @@
-import { Container } from "@/components/shared";
+import { Container, PizzaImage, Title } from "@/components/shared";
 import { prisma } from "@/prisma/prisma-client";
 import { notFound } from "next/navigation";
 
@@ -26,7 +26,19 @@ export default async function ProductPage({ params: { id } }: { params: { id: st
 
   return (
     <Container className="flex flex-col my-10">
-      <h1 className="text-3xl font-bold">{product.name}</h1>
+      <div className="flex flex-1">
+        <PizzaImage imageUrl={product.imageUrl} size={30} />
+
+        <div className="w-[490px] bg-[#f7f6f5] p-7">
+          <Title text={product.name} size="md" className="font-extrabold mb-1" />
+
+          <p className="text-gray-400">
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore perspiciatis ad magnam
+            consequatur, ut maxime voluptatem dicta fuga iusto accusantium ipsa, adipisci ipsum aut
+            rem similique laboriosam totam inventore dolorum.
+          </p>
+        </div>
+      </div>
     </Container>
   );
 }

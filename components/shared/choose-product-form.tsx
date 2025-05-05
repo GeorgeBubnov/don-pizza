@@ -11,18 +11,11 @@ import { cn } from "@/lib/utils";
 interface Props {
   imageUrl: string;
   name: string;
-  ingredients: Ingredient[];
   onSubmit?: VoidFunction;
   className?: string;
 }
 
-export const ChooseProductForm: React.FC<Props> = ({
-  name,
-  imageUrl,
-  ingredients,
-  onSubmit,
-  className,
-}) => {
+export const ChooseProductForm: React.FC<Props> = ({ name, imageUrl, onSubmit, className }) => {
   const totalPrice = 350;
 
   return (
@@ -40,8 +33,6 @@ export const ChooseProductForm: React.FC<Props> = ({
 
         <p className="text-gray-400">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, minus laudantium?
-          Magnam non repellat autem ad mollitia earum facere possimus aliquam, tenetur a, natus
-          reiciendis impedit similique enim. Magni, aut.
         </p>
 
         <Button className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">

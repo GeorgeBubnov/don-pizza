@@ -6,7 +6,6 @@ import React from "react";
 import toast from "react-hot-toast";
 import { ChoosePizzaForm } from "./choose-pizza-form";
 import { ChooseProductForm } from "./choose-product-form";
-import { addCartItem } from "@/services/cart";
 
 interface Props {
   product: ProductWithRelations;
@@ -14,6 +13,9 @@ interface Props {
 }
 
 export const ProductForm: React.FC<Props> = ({ product, onSubmit: _onSubmit }) => {
+  const addCartItemStore = useCartStore((state) => state.addCartItem);
+  const loading = useCartStore((state) => state.loading);
+
   const firstItem = product.items[0];
   const isPizzaForm = Boolean(firstItem.pizzaType);
 
@@ -21,7 +23,7 @@ export const ProductForm: React.FC<Props> = ({ product, onSubmit: _onSubmit }) =
     try {
       const itemId = productItemId ?? firstItem.id;
 
-      await addCartItem({
+      await addCartItemStore({
         productItemId: itemId,
         ingredients,
       });
@@ -43,6 +45,7 @@ export const ProductForm: React.FC<Props> = ({ product, onSubmit: _onSubmit }) =
         ingredients={product.ingredients}
         items={product.items}
         onSubmit={onSubmit}
+        loading={loading}
       />
     );
   }
@@ -53,6 +56,7 @@ export const ProductForm: React.FC<Props> = ({ product, onSubmit: _onSubmit }) =
       name={product.name}
       onSubmit={onSubmit}
       price={firstItem.price}
+      loading={loading}
     />
   );
 };

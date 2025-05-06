@@ -6,7 +6,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   try {
     const id = Number(params.id);
     const data = (await req.json()) as { quantity: number };
-    const token = "11111";
+    const token = req.cookies.get("cartToken")?.value;
 
     if (!token) {
       return NextResponse.json({ error: "Cart token not found" });
@@ -43,7 +43,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const id = Number(params.id);
-    const token = "11111";
+    const token = req.cookies.get("cartToken")?.value;
 
     if (!token) {
       return NextResponse.json({ error: "Cart token not found" });

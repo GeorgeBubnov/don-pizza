@@ -37,12 +37,14 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
 
       <SheetContent className="flex flex-col justify-between pb-0 bg-[#F4F1EE]">
         <div className={cn("flex flex-col h-full", !totalAmount && "justify-center")}>
-          {totalAmount > 0 && (
+          {totalAmount > 0 ? (
             <SheetHeader>
               <SheetTitle>
                 В корзине <span className="font-bold">{items.length} товара</span>
               </SheetTitle>
             </SheetHeader>
+          ) : (
+            <SheetTitle className="hidden"></SheetTitle>
           )}
 
           {!totalAmount && (

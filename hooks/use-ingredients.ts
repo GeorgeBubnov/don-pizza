@@ -22,5 +22,8 @@ export const useIngredients = () => {
     fetchIngredients();
   }, []);
 
-  return { ingredients, loading };
+  return {
+    ingredients,
+    loading,
+  };
 };

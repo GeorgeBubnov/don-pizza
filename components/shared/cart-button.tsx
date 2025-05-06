@@ -13,6 +13,7 @@ interface Props {
 export const CartButton: React.FC<Props> = ({ className }) => {
   const totalAmount = 593;
   const length = 3;
+  console.log("Debugging", 999);
 
   return (
     <CartDrawer>

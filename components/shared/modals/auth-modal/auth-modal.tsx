@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import React from "react";
 import { LoginForm } from "./forms/login-form";
 import { Button } from "@/components/ui";
+import { RegisterForm } from "./forms/register-form";
 
 interface Props {
   open: boolean;
@@ -28,8 +29,7 @@ export const AuthModal: React.FC<Props> = ({ open, onClose }) => {
         {type === "login" ? (
           <LoginForm onClose={handleClose} />
         ) : (
-          // <RegisterForm onClose={handleClose} />
-          <div></div>
+          <RegisterForm onClose={handleClose} />
         )}
 
         <Button variant="outline" onClick={onSwitchType} type="button" className="h-12">

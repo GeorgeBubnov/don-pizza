@@ -41,7 +41,7 @@ export const authOptions: AuthOptions = {
         }
 
         return {
-          id: String(findUser.id),
+          id: findUser.id,
           email: findUser.email,
           name: findUser.fullName,
           role: findUser.role,
@@ -125,10 +125,10 @@ export const authOptions: AuthOptions = {
       return token;
     },
     session({ session, token }) {
-      // if (session?.user) {
-      //   session.user.id = token.id;
-      //   session.user.role = token.role;
-      // }
+      if (session?.user) {
+        session.user.id = token.id;
+        session.user.role = token.role;
+      }
 
       return session;
     },

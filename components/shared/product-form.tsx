@@ -6,6 +6,7 @@ import React from "react";
 import toast from "react-hot-toast";
 import { ChoosePizzaForm } from "./choose-pizza-form";
 import { ChooseProductForm } from "./choose-product-form";
+import { addAction } from "@/services/action";
 
 interface Props {
   product: ProductWithRelations;
@@ -26,6 +27,16 @@ export const ProductForm: React.FC<Props> = ({ product, onSubmit: _onSubmit }) =
       await addCartItemStore({
         productItemId: itemId,
         ingredients,
+      });
+
+      await addAction({
+        action: "ui",
+        label: "add_cart_item",
+        data: {
+          productItemId: itemId,
+          productName: product.name,
+          ingredients,
+        },
       });
 
       toast.success(product.name + " добавлена в корзину");

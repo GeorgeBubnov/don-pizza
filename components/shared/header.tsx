@@ -29,15 +29,11 @@ export const Header: React.FC<Props> = ({ hasSearch = true, hasCart = true, clas
     if (searchParams.has("paid")) {
       toastMessage = "Заказ успешно оплачен! Информация отправлена на почту.";
     }
-
-    if (searchParams.has("verified")) {
-      toastMessage = "Почта успешно подтверждена!";
-    }
   }, []);
 
   return (
     <header className={cn("border-b", className)}>
-      <Container className="flex items-center justify-between py-8">
+      <Container className="flex items-center justify-between py-4">
         {/* Левая часть */}
         <Link href="/">
           <div className="flex items-center gap-4">

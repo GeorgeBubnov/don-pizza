@@ -1,3 +1,4 @@
+import { categories } from "./../prisma/constants";
 import { prisma } from "@/prisma/prisma-client";
 
 export interface GetSearchParams {
@@ -70,5 +71,19 @@ export const findPizzas = async (params: GetSearchParams) => {
     },
   });
 
-  return categories;
+  const sortedCategories = categories.map((category) => {
+    const sortedProducts = category.products
+      .map((product) => ({
+        ...product,
+        minPrice: Math.min(...product.items.map((i) => i.price)),
+      }))
+      .sort((a, b) => b.minPrice - a.minPrice);
+
+    return {
+      ...category,
+      products: sortedProducts,
+    };
+  });
+
+  return sortedCategories;
 };

@@ -4,6 +4,7 @@ import { Container } from "./container";
 import { Categories } from "./categories";
 import { SortPopup } from "./sort-popup";
 import { Category } from "@prisma/client";
+import { CartButton } from "./cart-button";
 
 interface Props {
   categories: Category[];
@@ -20,7 +21,7 @@ export const TopBar: React.FC<Props> = ({ categories, className }) => {
     >
       <Container className="flex items-center justify-between ">
         <Categories items={categories} />
-        <SortPopup />
+        <CartButton />
       </Container>
     </div>
   );

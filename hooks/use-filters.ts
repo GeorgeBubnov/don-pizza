@@ -58,25 +58,29 @@ export const useFilters = (): ReturnProps => {
   };
 
   useEffect(() => {
-    const hasFilters =
-      sizes.size > 0 ||
-      pizzaTypes.size > 0 ||
-      selectedIngredients.size > 0 ||
-      prices.priceFrom !== undefined ||
-      prices.priceTo !== undefined;
+    const timeout = setTimeout(() => {
+      const hasFilters =
+        sizes.size > 0 ||
+        pizzaTypes.size > 0 ||
+        selectedIngredients.size > 0 ||
+        prices.priceFrom !== undefined ||
+        prices.priceTo !== undefined;
 
-    if (hasFilters) {
-      addAction({
-        action: "ui",
-        label: "filter_applied",
-        data: {
-          sizes: Array.from(sizes),
-          pizzaTypes: Array.from(pizzaTypes),
-          ingredients: Array.from(selectedIngredients),
-          prices,
-        },
-      });
-    }
+      if (hasFilters) {
+        addAction({
+          action: "ui",
+          label: "filter_applied",
+          data: {
+            sizes: Array.from(sizes),
+            pizzaTypes: Array.from(pizzaTypes),
+            ingredients: Array.from(selectedIngredients),
+            prices,
+          },
+        });
+      }
+    }, 500);
+
+    return () => clearTimeout(timeout);
   }, [sizes, pizzaTypes, selectedIngredients, prices]);
 
   return React.useMemo(

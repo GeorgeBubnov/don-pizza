@@ -36,7 +36,20 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
   };
 
   return (
-    <Sheet>
+    <Sheet
+      onOpenChange={(open) => {
+        let name = "open_cart_drawer";
+        if (!open) name = "close_cart_drawer";
+        addAction({
+          action: "ui",
+          label: name,
+          data: {
+            totalAmount: totalAmount,
+            items: items,
+          },
+        });
+      }}
+    >
       <SheetTrigger asChild>{children}</SheetTrigger>
 
       <SheetContent className="flex flex-col justify-between pb-0 bg-[#F4F1EE]">
@@ -60,7 +73,20 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
               </p>
 
               <SheetClose>
-                <Button className="w-56 h-12 text-base" size="lg">
+                <Button
+                  className="w-56 h-12 text-base"
+                  size="lg"
+                  onClick={async () => {
+                    await addAction({
+                      action: "ui",
+                      label: "close_cart_drawer",
+                      data: {
+                        totalAmount: totalAmount,
+                        items: items,
+                      },
+                    });
+                  }}
+                >
                   <ArrowLeft className="w-5 mr-2" />
                   Вернуться назад
                 </Button>
@@ -85,10 +111,27 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                       name={item.name}
                       price={item.price}
                       quantity={item.quantity}
-                      onClickCountButton={(type) =>
-                        onClickCountButton(item.id, item.quantity, type)
-                      }
-                      onClickRemove={() => removeCartItem(item.id)}
+                      onClickCountButton={async (type) => {
+                        onClickCountButton(item.id, item.quantity, type);
+                        addAction({
+                          action: "ui",
+                          label: "change_cart_item_quantity",
+                          data: {
+                            item: item,
+                            type: type,
+                          },
+                        });
+                      }}
+                      onClickRemove={async () => {
+                        removeCartItem(item.id);
+                        addAction({
+                          action: "ui",
+                          label: "remove_cart_item",
+                          data: {
+                            item: item,
+                          },
+                        });
+                      }}
                     />
                   </div>
                 ))}

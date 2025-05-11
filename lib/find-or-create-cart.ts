@@ -4,6 +4,7 @@ export const findOrCreateCart = async (token: string) => {
   let userCart = await prisma.cart.findFirst({
     where: {
       token,
+      paid: false,
     },
   });
 
@@ -11,6 +12,7 @@ export const findOrCreateCart = async (token: string) => {
     userCart = await prisma.cart.create({
       data: {
         token,
+        paid: false,
       },
     });
   }

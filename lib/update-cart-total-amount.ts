@@ -5,6 +5,7 @@ export const updateCartTotalAmount = async (token: string) => {
   const userCart = await prisma.cart.findFirst({
     where: {
       token,
+      paid: false,
     },
     include: {
       items: {

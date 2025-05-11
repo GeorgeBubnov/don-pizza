@@ -21,6 +21,10 @@ import { PizzaSize, PizzaType } from "@/constants/pizza";
 import { Title } from "./title";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/hooks";
+import axios from "axios";
+import { CartDTO } from "@/services/dto/cart.dto";
+import { addAction } from "@/services/action";
+import toast from "react-hot-toast";
 
 export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { totalAmount, updateItemQuantity, items, removeCartItem } = useCart();
@@ -101,16 +105,25 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                     <span className="font-bold text-lg">{totalAmount} ₽</span>
                   </div>
 
-                  <Link href="/checkout">
-                    <Button
-                      onClick={() => setRedirecting(true)}
-                      type="submit"
-                      className="w-full h-12 text-base"
-                    >
-                      Оформить заказ
-                      <ArrowRight className="w-5 ml-2" />
-                    </Button>
-                  </Link>
+                  <Button
+                    onClick={async () => {
+                      await axios.post<CartDTO>("/api/checkout", {});
+                      await addAction({
+                        action: "ui",
+                        label: "click_cart_checkout",
+                        data: {
+                          totalAmount: totalAmount,
+                          items: items,
+                        },
+                      });
+                      toast.success("Заказ оформлен");
+                    }}
+                    type="submit"
+                    className="w-full h-12 text-base"
+                  >
+                    Оформить заказ
+                    <ArrowRight className="w-5 ml-2" />
+                  </Button>
                 </div>
               </SheetFooter>
             </>

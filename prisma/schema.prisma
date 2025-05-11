@@ -95,6 +95,8 @@ model Cart {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  paid Boolean?
 }
 
 model CartItem {

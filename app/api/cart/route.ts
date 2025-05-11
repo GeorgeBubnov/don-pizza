@@ -18,6 +18,7 @@ export async function GET(req: NextRequest) {
         OR: [
           {
             token,
+            paid: false,
           },
         ],
       },

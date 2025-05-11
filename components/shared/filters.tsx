@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { RangeSlider } from "./range-slider";
 import { CheckboxFiltersGroup } from "./checkbox-filters-group";
 import { useQueryFilters, useIngredients, useFilters } from "@/hooks";
+import { Button } from "../ui";
 
 interface Props {
   className?: string;
@@ -93,6 +94,30 @@ export const Filters: React.FC<Props> = ({ className }) => {
         onClickCheckbox={filters.setSelectedIngredients}
         selected={filters.selectedIngredients}
       />
+
+      {filters.sizes.size > 0 ||
+      filters.pizzaTypes.size > 0 ||
+      filters.selectedIngredients.size > 0 ||
+      filters.prices.priceFrom !== undefined ||
+      filters.prices.priceTo !== undefined ? (
+        <div className="mt-5 flex flex-col gap-4 max-h-96 pr-2">
+          <Button
+            variant="default"
+            className="text-base font-bold"
+            onClick={() => {
+              const params = new URLSearchParams(window.location.search);
+              params.delete("sizes");
+              params.delete("pizzaTypes");
+              params.delete("ingredients");
+              params.delete("priceFrom");
+              params.delete("priceTo");
+              window.location.search = params.toString();
+            }}
+          >
+            Сбросить фильтры
+          </Button>
+        </div>
+      ) : null}
     </div>
   );
 };

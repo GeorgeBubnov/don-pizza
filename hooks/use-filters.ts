@@ -1,6 +1,7 @@
 import { useSearchParams } from "next/navigation";
 import { useSet } from "react-use";
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import { addAction } from "@/services/action";
 
 interface PriceProps {
   priceFrom?: number;
@@ -55,6 +56,28 @@ export const useFilters = (): ReturnProps => {
       [name]: value,
     }));
   };
+
+  useEffect(() => {
+    const hasFilters =
+      sizes.size > 0 ||
+      pizzaTypes.size > 0 ||
+      selectedIngredients.size > 0 ||
+      prices.priceFrom !== undefined ||
+      prices.priceTo !== undefined;
+
+    if (hasFilters) {
+      addAction({
+        action: "ui",
+        label: "filter_applied",
+        data: {
+          sizes: Array.from(sizes),
+          pizzaTypes: Array.from(pizzaTypes),
+          ingredients: Array.from(selectedIngredients),
+          prices,
+        },
+      });
+    }
+  }, [sizes, pizzaTypes, selectedIngredients, prices]);
 
   return React.useMemo(
     () => ({

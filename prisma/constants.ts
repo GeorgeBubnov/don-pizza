@@ -9,7 +9,7 @@ export const categories = [
     name: "Закуски",
   },
   {
-    name: "Коктейли",
+    name: "Десерты",
   },
   {
     name: "Напитки",
@@ -194,5 +194,72 @@ export const products = [
     name: "Кофе Латте",
     imageUrl: "https://media.dodostatic.net/image/r:292x292/11EE7D61B0C26A3F85D97A78FEEE00AD.webp",
     categoryId: 5,
+  },
+];
+
+export const pizzasMain = [
+  {
+    name: "Креветка и песто",
+    imageUrl: "https://media.dodostatic.net/image/r:760x760/019591b65300735382df265607f4f75a.avif",
+  },
+  {
+    name: "Четыре сыра",
+    imageUrl: "https://media.dodostatic.net/image/r:760x760/11ee7d612a81468c99a6038db62dd54a.avif",
+  },
+  {
+    name: "Чилл Грилл",
+    imageUrl: "https://media.dodostatic.net/image/r:584x584/019591c6ae147092bab65405e08e005b.avif",
+  },
+  {
+    name: "Креветки блю чиз",
+    imageUrl: "https://media.dodostatic.net/image/r:584x584/0195ca1dda067488a0f6ac9260753e88.avif",
+  },
+  {
+    name: "Сырная",
+    imageUrl: "https://media.dodostatic.net/image/r:584x584/11ee7d610d91679bb519f38c3f45880f.avif",
+  },
+  {
+    name: "Пепперони фреш",
+    imageUrl: "https://media.dodostatic.net/image/r:584x584/11ee7d6130241e75b0ab33725248c0d0.avif",
+  },
+  {
+    name: "Чоризо фреш",
+    imageUrl: "https://media.dodostatic.net/image/r:584x584/11ee7d6170d5f99c89e91a2b3b91d16e.avif",
+  },
+  {
+    name: "Ветчина и грибы",
+    imageUrl: "https://media.dodostatic.net/image/r:584x584/11ee7d611ff4e070bc833c66d67f2e44.avif",
+  },
+  {
+    name: "Двойной цыпленок",
+    imageUrl: "https://media.dodostatic.net/image/r:584x584/11ee7d614d1bb6cb8ded93790d79e466.avif",
+  },
+  {
+    name: "Ветчина и сыр",
+    imageUrl: "https://media.dodostatic.net/image/r:584x584/11ee7d60fdfc92f19d5a6c8dee6ddb9b.avif",
+  },
+  {
+    name: "Баварская",
+    imageUrl: "https://media.dodostatic.net/image/r:584x584/019591a2f375703390252bbac9bf1cc6.avif",
+  },
+  {
+    name: "Аррива!",
+    imageUrl: "https://media.dodostatic.net/image/r:584x584/019591a041db716ab6c22e7d675722bd.avif",
+  },
+  {
+    name: "Креветки со сладким чили",
+    imageUrl: "https://media.dodostatic.net/image/r:584x584/0194d4fd4ba4798887defbdb3bc48750.avif",
+  },
+  {
+    name: "Бефстроганов",
+    imageUrl: "https://media.dodostatic.net/image/r:584x584/01953cece9107770849481f54187a17f.avif",
+  },
+  {
+    name: "Карбонара",
+    imageUrl: "https://media.dodostatic.net/image/r:584x584/019591b14a2e7663a8daf17169cfd23f.avif",
+  },
+  {
+    name: "Жюльен",
+    imageUrl: "https://media.dodostatic.net/image/r:584x584/11ee7d61762b28a4adbcb9a502d3e644.avif",
   },
 ];

@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { categories, _ingredients, products } from "./constants";
+import { categories, _ingredients, products, pizzasMain } from "./constants";
 import { prisma } from "./prisma-client";
 import { hashSync } from "bcrypt";
 
@@ -91,6 +91,21 @@ async function up() {
       },
     },
   });
+
+  for (let i = 0; i < pizzasMain.length; i++) {
+    const pizza = pizzasMain[i];
+
+    await prisma.product.create({
+      data: {
+        name: pizza.name,
+        imageUrl: pizza.imageUrl,
+        categoryId: 1,
+        ingredients: {
+          connect: _ingredients.slice(randomDecimalNumber(0, 10), randomDecimalNumber(10, 15)),
+        },
+      },
+    });
+  }
 
   await prisma.productItem.createMany({
     data: [

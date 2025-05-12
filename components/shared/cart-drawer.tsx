@@ -25,6 +25,7 @@ import axios from "axios";
 import { CartDTO } from "@/services/dto/cart.dto";
 import { addAction } from "@/services/action";
 import toast from "react-hot-toast";
+import { useCartStore } from "@/store";
 
 export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { totalAmount, updateItemQuantity, items, removeCartItem } = useCart();
@@ -148,25 +149,28 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                     <span className="font-bold text-lg">{totalAmount} ₽</span>
                   </div>
 
-                  <Button
-                    onClick={async () => {
-                      await axios.post<CartDTO>("/api/checkout", {});
-                      await addAction({
-                        action: "ui",
-                        label: "click_cart_checkout",
-                        data: {
-                          totalAmount: totalAmount,
-                          items: items,
-                        },
-                      });
-                      toast.success("Заказ оформлен");
-                    }}
-                    type="submit"
-                    className="w-full h-12 text-base"
-                  >
-                    Оформить заказ
-                    <ArrowRight className="w-5 ml-2" />
-                  </Button>
+                  <SheetClose className="w-full">
+                    <Button
+                      onClick={async () => {
+                        await axios.post<CartDTO>("/api/checkout", {});
+                        await addAction({
+                          action: "ui",
+                          label: "click_cart_checkout",
+                          data: {
+                            totalAmount: totalAmount,
+                            items: items,
+                          },
+                        });
+                        useCartStore.setState({ items: [], totalAmount: 0 });
+                        toast.success("Заказ оформлен");
+                      }}
+                      type="submit"
+                      className="w-full h-12 text-base"
+                    >
+                      Оформить заказ
+                      <ArrowRight className="w-5 ml-2" />
+                    </Button>
+                  </SheetClose>
                 </div>
               </SheetFooter>
             </>

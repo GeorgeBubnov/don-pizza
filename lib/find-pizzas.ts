@@ -9,6 +9,7 @@ export interface GetSearchParams {
   ingredients?: string;
   priceFrom?: string;
   priceTo?: string;
+  sort?: "cheap" | "expensive" | "rating";
 }
 
 const DEFAULT_MIN_PRICE = 0;
@@ -21,6 +22,8 @@ export const findPizzas = async (params: GetSearchParams) => {
 
   const minPrice = Number(params.priceFrom) || DEFAULT_MIN_PRICE;
   const maxPrice = Number(params.priceTo) || DEFAULT_MAX_PRICE;
+
+  const sortBy = params.sortBy || "rating";
 
   const categories = await prisma.category.findMany({
     include: {
@@ -77,7 +80,18 @@ export const findPizzas = async (params: GetSearchParams) => {
         ...product,
         minPrice: Math.min(...product.items.map((i) => i.price)),
       }))
-      .sort((a, b) => b.minPrice - a.minPrice);
+      .sort((a, b) => {
+        switch (sortBy) {
+          case "cheap":
+            return a.minPrice - b.minPrice;
+          case "expensive":
+            return b.minPrice - a.minPrice;
+          case "rating":
+            return (a.rate || 0) - (b.rate || 0);
+          default:
+            return 0;
+        }
+      });
 
     return {
       ...category,

@@ -121,8 +121,8 @@ export const products = [
     categoryId: 2,
   },
   {
-    name: "Кофе Латте",
-    imageUrl: "https://media.dodostatic.net/image/r:292x292/11EE7D61B0C26A3F85D97A78FEEE00AD.webp",
+    name: "Какао",
+    imageUrl: "https://media.dodostatic.net/image/r:760x760/0195922c4ad07090a7e2a0d20844639f.avif",
     categoryId: 2,
   },
   {
@@ -136,7 +136,7 @@ export const products = [
     categoryId: 3,
   },
   {
-    name: "Картофель из печи с соусом 🌱",
+    name: "Картофель из печи с соусом",
     imageUrl: "https://media.dodostatic.net/image/r:292x292/11EED646A9CD324C962C6BEA78124F19.webp",
     categoryId: 3,
   },
@@ -146,7 +146,7 @@ export const products = [
     categoryId: 3,
   },
   {
-    name: "Острый Додстер 🌶️🌶️",
+    name: "Острый Додстер",
     imageUrl: "https://media.dodostatic.net/image/r:292x292/11EE796FD3B594068F7A752DF8161D04.webp",
     categoryId: 3,
   },
@@ -166,8 +166,28 @@ export const products = [
     categoryId: 4,
   },
   {
-    name: "Классический молочный коктейль 👶",
+    name: "Классический молочный коктейль",
     imageUrl: "https://media.dodostatic.net/image/r:292x292/11EE796F93FB126693F96CB1D3E403FB.webp",
+    categoryId: 4,
+  },
+  {
+    name: "Карамельный чизкейк",
+    imageUrl: "https://media.dodostatic.net/image/r:760x760/019592118e4076b486f441404702ef2b.avif",
+    categoryId: 4,
+  },
+  {
+    name: "Черничный маффин",
+    imageUrl: "https://media.dodostatic.net/image/r:760x760/01959208214376459ac0ea89deba9f41.avif",
+    categoryId: 4,
+  },
+  {
+    name: "Тирамису",
+    imageUrl: "https://media.dodostatic.net/image/r:760x760/0195920f126b72208ce364b4c459364f.avif",
+    categoryId: 4,
+  },
+  {
+    name: "Эклеры-мини с заварным кремом",
+    imageUrl: "https://media.dodostatic.net/image/r:760x760/11ef8c972951d9a193b3f3901197b8da.avif",
     categoryId: 4,
   },
   {
@@ -197,7 +217,7 @@ export const products = [
   },
 ];
 
-export const pizzasMain = [
+export const pizzasNames = [
   {
     name: "Креветка и песто",
     imageUrl: "https://media.dodostatic.net/image/r:760x760/019591b65300735382df265607f4f75a.avif",
@@ -243,7 +263,7 @@ export const pizzasMain = [
     imageUrl: "https://media.dodostatic.net/image/r:584x584/019591a2f375703390252bbac9bf1cc6.avif",
   },
   {
-    name: "Аррива!",
+    name: "Аррива",
     imageUrl: "https://media.dodostatic.net/image/r:584x584/019591a041db716ab6c22e7d675722bd.avif",
   },
   {

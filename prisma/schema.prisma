@@ -21,9 +21,8 @@ model User {
   provider   String?
   providerId String?
 
-  cart             Cart?
-  orders           Order[]
-  verificationCode VerificationCode?
+  cart   Cart?
+  orders Order[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -140,39 +139,6 @@ model Order {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model VerificationCode {
-  id Int @id @default(autoincrement())
-
-  user   User @relation(fields: [userId], references: [id])
-  userId Int  @unique
-
-  code String
-
-  createdAt DateTime @default(now())
-
-  @@unique([userId, code])
-}
-
-model Story {
-  id              Int    @id @default(autoincrement())
-  previewImageUrl String
-
-  items StoryItem[]
-
-  createdAt DateTime @default(now())
-}
-
-model StoryItem {
-  id Int @id @default(autoincrement())
-
-  storyId Int
-  story   Story @relation(fields: [storyId], references: [id])
-
-  sourceUrl String
-
-  createdAt DateTime @default(now())
 }
 
 model UserAction {

@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { categories, _ingredients, products, pizzasMain } from "./constants";
+import { categories, _ingredients, products, pizzasNames } from "./constants";
 import { prisma } from "./prisma-client";
 import { hashSync } from "bcrypt";
 
@@ -7,7 +7,14 @@ const randomDecimalNumber = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min) * 10 + min * 10) / 10;
 };
 
-const generateProductItem = ({
+const generateProductItem = ({ productId }: { productId: number }) => {
+  return {
+    productId,
+    price: randomDecimalNumber(80, 350),
+  } as Prisma.ProductItemUncheckedCreateInput;
+};
+
+const generatePizzaItem = ({
   productId,
   pizzaType,
   size,
@@ -18,10 +25,49 @@ const generateProductItem = ({
 }) => {
   return {
     productId,
-    price: randomDecimalNumber(190, 600),
+    price: randomDecimalNumber(200, 1000),
     pizzaType,
     size,
   } as Prisma.ProductItemUncheckedCreateInput;
+};
+
+const generatePizzaItemTraditionAll = ({ productId }: { productId: number }) => {
+  return [
+    generatePizzaItem({ productId: productId, pizzaType: 1, size: 20 }),
+    generatePizzaItem({ productId: productId, pizzaType: 1, size: 30 }),
+    generatePizzaItem({ productId: productId, pizzaType: 1, size: 40 }),
+  ];
+};
+
+const generatePizzaItemThinAll = ({ productId }: { productId: number }) => {
+  return [
+    generatePizzaItem({ productId: productId, pizzaType: 2, size: 20 }),
+    generatePizzaItem({ productId: productId, pizzaType: 2, size: 30 }),
+    generatePizzaItem({ productId: productId, pizzaType: 2, size: 40 }),
+  ];
+};
+
+const generatePizzaItemTraditionPlus = ({ productId }: { productId: number }) => {
+  return [
+    ...generatePizzaItemTraditionAll({ productId: productId }),
+    generatePizzaItem({ productId: productId, pizzaType: 2, size: 40 }),
+  ];
+};
+
+const generatePizzaItemThinPlus = ({ productId }: { productId: number }) => {
+  return [
+    generatePizzaItem({ productId: productId, pizzaType: 1, size: 30 }),
+    ...generatePizzaItemThinAll({ productId: productId }),
+  ];
+};
+
+const generatePizzaItemSome = ({ productId }: { productId: number }) => {
+  return [
+    generatePizzaItem({ productId: productId, pizzaType: 1, size: 20 }),
+    generatePizzaItem({ productId: productId, pizzaType: 1, size: 30 }),
+    generatePizzaItem({ productId: productId, pizzaType: 2, size: 30 }),
+    generatePizzaItem({ productId: productId, pizzaType: 2, size: 40 }),
+  ];
 };
 
 async function up() {
@@ -56,96 +102,60 @@ async function up() {
     data: products,
   });
 
-  const pizza1 = await prisma.product.create({
-    data: {
-      name: "Пепперони фреш",
-      imageUrl:
-        "https://media.dodostatic.net/image/r:233x233/11EE7D61304FAF5A98A6958F2BB2D260.webp",
-      categoryId: 1,
-      ingredients: {
-        connect: _ingredients.slice(0, 5),
-      },
-    },
+  const allProductItems = [];
+
+  for (let i = 1; i < products.length + 1; i++) {
+    allProductItems.push(generatePizzaItem({ productId: i }));
+  }
+
+  await prisma.productItem.createMany({
+    data: allProductItems,
   });
 
-  const pizza2 = await prisma.product.create({
-    data: {
-      name: "Сырная",
-      imageUrl:
-        "https://media.dodostatic.net/image/r:233x233/11EE7D610CF7E265B7C72BE5AE757CA7.webp",
-      categoryId: 1,
-      ingredients: {
-        connect: _ingredients.slice(5, 10),
-      },
-    },
-  });
+  const createdPizzas = [];
 
-  const pizza3 = await prisma.product.create({
-    data: {
-      name: "Чоризо фреш",
-      imageUrl:
-        "https://media.dodostatic.net/image/r:584x584/11EE7D61706D472F9A5D71EB94149304.webp",
-      categoryId: 1,
-      ingredients: {
-        connect: _ingredients.slice(10, 40),
-      },
-    },
-  });
-
-  for (let i = 0; i < pizzasMain.length; i++) {
-    const pizza = pizzasMain[i];
-
-    await prisma.product.create({
+  for (const pizza of pizzasNames) {
+    const product = await prisma.product.create({
       data: {
         name: pizza.name,
         imageUrl: pizza.imageUrl,
         categoryId: 1,
         ingredients: {
-          connect: _ingredients.slice(randomDecimalNumber(0, 10), randomDecimalNumber(10, 15)),
+          connect: _ingredients.slice(randomDecimalNumber(0, 10), randomDecimalNumber(10, 17)),
         },
       },
     });
+
+    createdPizzas.push(product);
+  }
+
+  const allPizzaItems = [];
+
+  for (const pizza of createdPizzas) {
+    const random = Math.floor(Math.random() * 3);
+    let items;
+    switch (random) {
+      case 0:
+        items = generatePizzaItemTraditionPlus({ productId: pizza.id });
+        break;
+      case 1:
+        items = generatePizzaItemThinPlus({ productId: pizza.id });
+        break;
+      case 2:
+        items = [
+          ...generatePizzaItemTraditionAll({ productId: pizza.id }),
+          ...generatePizzaItemThinAll({ productId: pizza.id }),
+        ];
+        break;
+      default:
+        items = generatePizzaItemSome({ productId: pizza.id });
+    }
+
+    allPizzaItems.push(...items);
   }
 
   await prisma.productItem.createMany({
-    data: [
-      // Пицца "Пепперони фреш"
-      generateProductItem({ productId: pizza1.id, pizzaType: 1, size: 20 }),
-      generateProductItem({ productId: pizza1.id, pizzaType: 2, size: 30 }),
-      generateProductItem({ productId: pizza1.id, pizzaType: 2, size: 40 }),
-
-      // Пицца "Сырная"
-      generateProductItem({ productId: pizza2.id, pizzaType: 1, size: 20 }),
-      generateProductItem({ productId: pizza2.id, pizzaType: 1, size: 30 }),
-      generateProductItem({ productId: pizza2.id, pizzaType: 1, size: 40 }),
-      generateProductItem({ productId: pizza2.id, pizzaType: 2, size: 20 }),
-      generateProductItem({ productId: pizza2.id, pizzaType: 2, size: 30 }),
-      generateProductItem({ productId: pizza2.id, pizzaType: 2, size: 40 }),
-
-      // Пицца "Чоризо фреш"
-      generateProductItem({ productId: pizza3.id, pizzaType: 1, size: 20 }),
-      generateProductItem({ productId: pizza3.id, pizzaType: 2, size: 30 }),
-      generateProductItem({ productId: pizza3.id, pizzaType: 2, size: 40 }),
-
-      // Остальные продукты
-      generateProductItem({ productId: 1 }),
-      generateProductItem({ productId: 2 }),
-      generateProductItem({ productId: 3 }),
-      generateProductItem({ productId: 4 }),
-      generateProductItem({ productId: 5 }),
-      generateProductItem({ productId: 6 }),
-      generateProductItem({ productId: 7 }),
-      generateProductItem({ productId: 8 }),
-      generateProductItem({ productId: 9 }),
-      generateProductItem({ productId: 10 }),
-      generateProductItem({ productId: 11 }),
-      generateProductItem({ productId: 12 }),
-      generateProductItem({ productId: 13 }),
-      generateProductItem({ productId: 14 }),
-      generateProductItem({ productId: 15 }),
-      generateProductItem({ productId: 16 }),
-      generateProductItem({ productId: 17 }),
-    ],
+    data: allPizzaItems,
   });
 
   await prisma.cart.createMany({
@@ -172,65 +182,6 @@ async function up() {
         connect: [{ id: 1 }, { id: 2 }, { id: 3 }],
       },
     },
-  });
-
-  await prisma.story.createMany({
-    data: [
-      {
-        previewImageUrl:
-          "https://cdn.inappstory.ru/story/xep/xzh/zmc/cr4gcw0aselwvf628pbmj3j/custom_cover/logo-350x440.webp?k=IgAAAAAAAAAE&v=3101815496",
-      },
-      {
-        previewImageUrl:
-          "https://cdn.inappstory.ru/story/km2/9gf/jrn/sb7ls1yj9fe5bwvuwgym73e/custom_cover/logo-350x440.webp?k=IgAAAAAAAAAE&v=3074015640",
-      },
-      {
-        previewImageUrl:
-          "https://cdn.inappstory.ru/story/quw/acz/zf5/zu37vankpngyccqvgzbohj1/custom_cover/logo-350x440.webp?k=IgAAAAAAAAAE&v=1336215020",
-      },
-      {
-        previewImageUrl:
-          "https://cdn.inappstory.ru/story/7oc/5nf/ipn/oznceu2ywv82tdlnpwriyrq/custom_cover/logo-350x440.webp?k=IgAAAAAAAAAE&v=38903958",
-      },
-      {
-        previewImageUrl:
-          "https://cdn.inappstory.ru/story/q0t/flg/0ph/xt67uw7kgqe9bag7spwkkyw/custom_cover/logo-350x440.webp?k=IgAAAAAAAAAE&v=2941222737",
-      },
-      {
-        previewImageUrl:
-          "https://cdn.inappstory.ru/story/lza/rsp/2gc/xrar8zdspl4saq4uajmso38/custom_cover/logo-350x440.webp?k=IgAAAAAAAAAE&v=4207486284",
-      },
-    ],
-  });
-
-  await prisma.storyItem.createMany({
-    data: [
-      {
-        storyId: 1,
-        sourceUrl:
-          "https://cdn.inappstory.ru/file/dd/yj/sx/oqx9feuljibke3mknab7ilb35t.webp?k=IgAAAAAAAAAE",
-      },
-      {
-        storyId: 1,
-        sourceUrl:
-          "https://cdn.inappstory.ru/file/jv/sb/fh/io7c5zarojdm7eus0trn7czdet.webp?k=IgAAAAAAAAAE",
-      },
-      {
-        storyId: 1,
-        sourceUrl:
-          "https://cdn.inappstory.ru/file/ts/p9/vq/zktyxdxnjqbzufonxd8ffk44cb.webp?k=IgAAAAAAAAAE",
-      },
-      {
-        storyId: 1,
-        sourceUrl:
-          "https://cdn.inappstory.ru/file/ur/uq/le/9ufzwtpdjeekidqq04alfnxvu2.webp?k=IgAAAAAAAAAE",
-      },
-      {
-        storyId: 1,
-        sourceUrl:
-          "https://cdn.inappstory.ru/file/sy/vl/c7/uyqzmdojadcbw7o0a35ojxlcul.webp?k=IgAAAAAAAAAE",
-      },
-    ],
   });
 }
 
